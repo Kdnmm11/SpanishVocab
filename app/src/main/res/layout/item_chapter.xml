@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardChapter"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="10dp"
+    android:layout_marginHorizontal="8dp"
+    android:foreground="?android:attr/selectableItemBackground"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="8dp"
+    android:backgroundTint="@color/card_background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="22dp">
+
+        <TextView
+            android:id="@+id/textChapterTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="챕터 제목"
+            android:textColor="@color/primary_blue"
+            android:textSize="21sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-medium"/>
+
+        <TextView
+            android:id="@+id/textChapterDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:text="설명"
+            android:textColor="@color/text_secondary"
+            android:textSize="15sp"/>
+
+        <TextView
+            android:id="@+id/textWordCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/chip_background"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="7dp"
+            android:text="5 단어"
+            android:textColor="@color/primary_blue"
+            android:textStyle="bold"
+            android:textSize="12sp"/>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

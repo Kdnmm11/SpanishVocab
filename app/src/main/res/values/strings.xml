@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Spanish Vocab</string>
+    <string name="home">Home</string>
+    <string name="chapters">Chapters</string>
+    <string name="favorites">Favorites</string>
+    <string name="test">Test</string>
+    <string name="search">Search</string>
+    <string name="search_words">Search words...</string>
+    <string name="favorite">Favorite</string>
+    <string name="unfavorite">Unfavorite</string>
+    <string name="next_word">Next Word</string>
+    <string name="previous_word">Previous Word</string>
+    <string name="play_pronunciation">Play Pronunciation</string>
+    <string name="start_test">Start Test</string>
+    <string name="meaning">Meaning</string>
+    <string name="example">Example</string>
+    <string name="translation">Translation</string>
+    <string name="pronunciation">Pronunciation</string>
+    <string name="total_words">Total Words</string>
+    <string name="mastered_words">Mastered Words</string>
+    <string name="learning_words">Learning Words</string>
+</resources>

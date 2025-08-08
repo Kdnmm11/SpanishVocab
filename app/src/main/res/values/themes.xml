@@ -1,0 +1,34 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Base.Theme.SpanishVocab" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">#6366F1</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorPrimaryContainer">#E0E7FF</item>
+        <item name="colorOnPrimaryContainer">#1E1B4B</item>
+        <item name="colorSecondary">#818CF8</item>
+        <item name="colorOnSecondary">#FFFFFF</item>
+        <item name="colorError">#EF4444</item>
+        <item name="android:windowBackground">#F8FAFC</item>
+        <item name="colorSurface">#FFFFFF</item>
+        <item name="colorOnSurface">#1F2937</item>
+    </style>
+
+    <style name="Theme.SpanishVocab" parent="Base.Theme.SpanishVocab" />
+
+    <!-- Material3 버튼 스타일(고급/라운드) : cornerRadius는 shapeAppearance로! -->
+    <style name="LevelButtonStyle" parent="Widget.Material3.Button">
+        <item name="backgroundTint">#6366F1</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">19sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="elevation">7dp</item>
+        <item name="android:minHeight">56dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingHorizontal">12dp</item>
+        <item name="shapeAppearance">@style/LevelButtonShape</item>
+    </style>
+
+    <!-- shapeAppearance 스타일 별도 정의 -->
+    <style name="LevelButtonShape" parent="ShapeAppearance.Material3.Corner.Full">
+        <item name="cornerSize">22dp</item>
+    </style>
+</resources>

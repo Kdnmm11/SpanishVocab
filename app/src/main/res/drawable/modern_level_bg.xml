@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 기본 그라데이션 배경 -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#F0F4FF"
+                android:endColor="#E0E7FF"
+                android:angle="135" />
+        </shape>
+    </item>
+    <!-- 오른쪽 아래 연한 브러시 느낌의 타원형 효과 -->
+    <item>
+        <shape android:shape="oval">
+            <size android:width="700dp" android:height="400dp" />
+            <gradient
+                android:type="radial"
+                android:gradientRadius="340dp"
+                android:startColor="#C7D2FE"
+                android:endColor="#FFFFFFFF"
+                />
+        </shape>
+        <gravity android:gravity="bottom|end"/>
+    </item>
+</layer-list>
