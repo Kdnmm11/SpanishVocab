@@ -6,15 +6,20 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.example.spanishvocab.data.Word
 import java.util.*
 
 class StudyActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private lateinit var toolbar: Toolbar
+    private lateinit var toolbarTitle: TextView
     private lateinit var progressText: TextView
     private lateinit var wordCard: CardView
     private lateinit var spanishText: TextView
@@ -25,6 +30,7 @@ class StudyActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private lateinit var exampleText: TextView
     private lateinit var exampleTranslationText: TextView
     private lateinit var pronounceButton: ImageButton
+    private lateinit var pronounceExampleButton: ImageButton
     private lateinit var favoriteButton: ImageButton
     private lateinit var showMeaningButton: Button
     private lateinit var showExampleButton: Button
@@ -34,15 +40,19 @@ class StudyActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private var tts: TextToSpeech? = null
     private lateinit var wordsList: List<Word>
     private var currentIndex = 0
-    private var showingMeaning = false
-    private var showingExample = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // 상태바 색상(메인과 일관)
+        WindowCompat.setDecorFitsSystemWindows(window, true)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.primary_blue)
+        WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = false
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_study)
 
         wordsList = intent.getParcelableArrayListExtra("words") ?: listOf()
         if (wordsList.isEmpty()) {
+            Toast.makeText(this, "학습할 단어가 없습니다.", Toast.LENGTH_SHORT).show()
             finish()
             return
         }
@@ -54,6 +64,7 @@ class StudyActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private fun setupViews() {
         toolbar = findViewById(R.id.toolbar)
+        toolbarTitle = findViewById(R.id.toolbarTitle)
         progressText = findViewById(R.id.textProgress)
         wordCard = findViewById(R.id.cardWord)
         spanishText = findViewById(R.id.textSpanish)
@@ -64,43 +75,22 @@ class StudyActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         exampleText = findViewById(R.id.textExample)
         exampleTranslationText = findViewById(R.id.textExampleTranslation)
         pronounceButton = findViewById(R.id.buttonPronounce)
+        pronounceExampleButton = findViewById(R.id.buttonPronounceExample)
         favoriteButton = findViewById(R.id.buttonFavorite)
         showMeaningButton = findViewById(R.id.buttonShowMeaning)
         showExampleButton = findViewById(R.id.buttonShowExample)
         nextButton = findViewById(R.id.buttonNext)
         previousButton = findViewById(R.id.buttonPrevious)
 
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = "Study Mode"
+        toolbarTitle.text = "Study Mode"
 
-        setupClickListeners()
-    }
-
-    private fun setupClickListeners() {
-        pronounceButton.setOnClickListener {
-            pronounceWord()
-        }
-
-        favoriteButton.setOnClickListener {
-            toggleFavorite()
-        }
-
-        showMeaningButton.setOnClickListener {
-            showMeaning()
-        }
-
-        showExampleButton.setOnClickListener {
-            showExample()
-        }
-
-        nextButton.setOnClickListener {
-            nextWord()
-        }
-
-        previousButton.setOnClickListener {
-            previousWord()
-        }
+        pronounceButton.setOnClickListener { pronounceWord() }
+        pronounceExampleButton.setOnClickListener { pronounceExample() }
+        favoriteButton.setOnClickListener { toggleFavorite() }
+        showMeaningButton.setOnClickListener { showMeaning() }
+        showExampleButton.setOnClickListener { showExample() }
+        nextButton.setOnClickListener { nextWord() }
+        previousButton.setOnClickListener { previousWord() }
     }
 
     private fun setupTTS() {
@@ -123,31 +113,26 @@ class StudyActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         exampleText.text = word.example
         exampleTranslationText.text = word.exampleTranslation
 
-        // 상태 초기화
-        showingMeaning = false
-        showingExample = false
+        // 초기 상태
         meaningLayout.visibility = View.GONE
         exampleLayout.visibility = View.GONE
         showMeaningButton.visibility = View.VISIBLE
         showExampleButton.visibility = View.VISIBLE
 
         updateFavoriteButton()
-        updateNavigationButtons()
+        updateNavButtons()
     }
 
     private fun updateFavoriteButton() {
         val word = wordsList[currentIndex]
-        val favoriteIcon = if (word.isFavorite) {
-            R.drawable.ic_favorite_filled
-        } else {
-            R.drawable.ic_favorite_outline
-        }
-        favoriteButton.setImageResource(favoriteIcon)
+        val icon = if (word.isFavorite) R.drawable.ic_favorite_filled
+        else R.drawable.ic_favorite_outline
+        favoriteButton.setImageResource(icon)
     }
 
-    private fun updateNavigationButtons() {
+    private fun updateNavButtons() {
         previousButton.isEnabled = currentIndex > 0
-        nextButton.text = if (currentIndex < wordsList.size - 1) "Next" else "Finish"
+        nextButton.text = if (currentIndex < wordsList.size - 1) "다음" else "완료"
     }
 
     private fun toggleFavorite() {
@@ -161,14 +146,19 @@ class StudyActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         tts?.speak(word.spanish, TextToSpeech.QUEUE_FLUSH, null, null)
     }
 
+    private fun pronounceExample() {
+        val word = wordsList[currentIndex]
+        if (word.example.isNotBlank()) {
+            tts?.speak(word.example, TextToSpeech.QUEUE_FLUSH, null, null)
+        }
+    }
+
     private fun showMeaning() {
-        showingMeaning = true
         meaningLayout.visibility = View.VISIBLE
         showMeaningButton.visibility = View.GONE
     }
 
     private fun showExample() {
-        showingExample = true
         exampleLayout.visibility = View.VISIBLE
         showExampleButton.visibility = View.GONE
     }
@@ -187,11 +177,6 @@ class StudyActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         } else {
             finish()
         }
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return true
     }
 
     override fun onDestroy() {

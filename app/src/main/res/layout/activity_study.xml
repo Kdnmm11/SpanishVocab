@@ -2,43 +2,69 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_gray">
 
+    <!-- Toolbar (88dp) -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_width="0dp"
+        android:layout_height="88dp"
         android:background="@color/primary_blue"
+        android:elevation="0dp"
+        app:title=""
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
+    <!-- 가운데 타이틀 -->
+    <TextView
+        android:id="@+id/toolbarTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Study Mode"
+        android:textColor="@android:color/white"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="@id/toolbar"
+        app:layout_constraintBottom_toBottomOf="@id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="0.70" />
+
+    <!-- 진행도 -->
     <TextView
         android:id="@+id/textProgress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        android:text="1 / 10"
+        android:text="1 / 5"
         android:textColor="@color/text_secondary"
         android:textSize="16sp"
+        android:layout_marginTop="14dp"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
+    <!-- 단어 카드 -->
     <androidx.cardview.widget.CardView
         android:id="@+id/cardWord"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="10dp"
+        android:layout_marginBottom="12dp"
+        android:backgroundTint="@color/card_background"
         app:cardCornerRadius="20dp"
-        app:cardElevation="12dp"
+        app:cardElevation="2dp"
         app:layout_constraintTop_toBottomOf="@id/textProgress"
+        app:layout_constraintBottom_toTopOf="@id/navBottom"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:backgroundTint="@color/card_background">
+        app:layout_constraintVertical_bias="0.42">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -46,6 +72,7 @@
             android:orientation="vertical"
             android:padding="28dp">
 
+            <!-- 상단: 단어/발음/버튼 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -77,7 +104,6 @@
                         android:textColor="@color/text_secondary"
                         android:textSize="16sp"
                         android:textStyle="italic"/>
-
                 </LinearLayout>
 
                 <ImageButton
@@ -87,7 +113,7 @@
                     android:background="?android:attr/selectableItemBackgroundBorderless"
                     android:contentDescription="@string/play_pronunciation"
                     android:src="@drawable/ic_volume_up"
-                    android:tint="@color/primary_blue"/>
+                    app:tint="@color/primary_blue"/>
 
                 <ImageButton
                     android:id="@+id/buttonFavorite"
@@ -96,11 +122,10 @@
                     android:background="?android:attr/selectableItemBackgroundBorderless"
                     android:contentDescription="@string/favorite"
                     android:src="@drawable/ic_favorite_outline"
-                    android:tint="@color/accent_red"/>
-
+                    app:tint="@color/accent_red"/>
             </LinearLayout>
 
-            <!-- 뜻 보기 -->
+            <!-- 뜻 -->
             <LinearLayout
                 android:id="@+id/layoutMeaning"
                 android:layout_width="match_parent"
@@ -135,7 +160,7 @@
                     android:lineSpacingExtra="7dp" />
             </LinearLayout>
 
-            <!-- 예문 보기 -->
+            <!-- 예문 -->
             <LinearLayout
                 android:id="@+id/layoutExample"
                 android:layout_width="match_parent"
@@ -150,14 +175,32 @@
                     android:background="@color/light_blue"
                     android:alpha="0.5" />
 
-                <TextView
+                <!-- 예문 타이틀 + 재생 버튼 -->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:text="@string/example"
-                    android:textColor="@color/primary_blue"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/example"
+                        android:textColor="@color/primary_blue"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <ImageButton
+                        android:id="@+id/buttonPronounceExample"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:background="?android:attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="@string/play_pronunciation"
+                        android:src="@drawable/ic_volume_up"
+                        app:tint="@color/primary_blue"/>
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/textExample"
@@ -181,15 +224,17 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- 학습용 아래 버튼들 -->
+    <!-- 뜻/예문 토글 버튼 -->
     <LinearLayout
+        android:id="@+id/rowToggles"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:layout_marginHorizontal="22dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintTop_toBottomOf="@id/cardWord"
+        app:layout_constraintBottom_toTopOf="@id/navBottom"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -218,17 +263,18 @@
             android:textStyle="bold"/>
     </LinearLayout>
 
+    <!-- 하단 내비 버튼 -->
     <LinearLayout
+        android:id="@+id/navBottom"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="22dp"
-        android:layout_marginTop="14dp"
-        app:layout_constraintTop_toBottomOf="@id/buttonShowMeaning"
+        android:layout_marginBottom="50dp"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:gravity="center">
+        app:layout_constraintEnd_toEndOf="parent">
 
         <Button
             android:id="@+id/buttonPrevious"
@@ -253,4 +299,5 @@
             android:textSize="16sp"
             android:textStyle="bold"/>
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

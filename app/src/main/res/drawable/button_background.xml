@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
-    <solid android:color="@color/primary_blue" />
-    <corners android:radius="12dp" />
-</shape>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/ripple_dark">
+    <item>
+        <selector>
+            <!-- Pressed: 살짝 더 진한 파란색 -->
+            <item android:state_pressed="true">
+                <shape android:shape="rectangle">
+                    <corners android:radius="14dp"/>
+                    <solid android:color="@color/primary_blue_pressed"/>
+                </shape>
+            </item>
+
+            <!-- Default -->
+            <item>
+                <shape android:shape="rectangle">
+                    <corners android:radius="14dp"/>
+                    <solid android:color="@color/primary_blue"/>
+                </shape>
+            </item>
+        </selector>
+    </item>
+</ripple>

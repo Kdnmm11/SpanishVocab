@@ -4,65 +4,80 @@
     android:id="@+id/cardWord"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginVertical="7dp"
-    android:layout_marginHorizontal="8dp"
-    android:foreground="?android:attr/selectableItemBackground"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="6dp"
-    android:backgroundTint="@color/card_background">
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="8dp"
+    android:backgroundTint="@color/card_background"
+    app:cardCornerRadius="18dp"
+    app:cardElevation="2dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="20dp">
+        android:orientation="vertical"
+        android:padding="18dp">
 
+        <!-- 상단: 단어 + 발음 + (스피커, 즐겨찾기) -->
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/textSpanish"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Spanish"
-                android:textColor="@color/primary_blue"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:fontFamily="sans-serif-medium" />
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/textPronunciation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:text="[발음]"
-                android:textColor="@color/text_secondary"
-                android:textSize="14sp"
-                android:textStyle="italic"/>
+                <TextView
+                    android:id="@+id/textSpanish"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="spanish"
+                    android:textColor="@color/primary_blue"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/textMeaning"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="7dp"
-                android:text="의미, 뜻"
-                android:textColor="@color/text_primary"
-                android:textSize="16sp"
-                android:lineSpacingExtra="5dp"/>
+                <TextView
+                    android:id="@+id/textPronunciation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="[발음]"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="13sp"
+                    android:textStyle="italic" />
+            </LinearLayout>
 
+            <!-- 스피커 버튼 (검색에서도 보이게 이 ID를 반드시 유지) -->
+            <ImageButton
+                android:id="@+id/buttonPronounce"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/play_pronunciation"
+                android:src="@drawable/ic_volume_up"
+                app:tint="@color/primary_blue" />
+
+            <!-- 즐겨찾기 하트 -->
+            <ImageButton
+                android:id="@+id/buttonFavorite"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/favorite"
+                android:src="@drawable/ic_favorite_outline"
+                app:tint="@color/accent_red" />
         </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/buttonFavorite"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/favorite"
-            android:src="@drawable/ic_favorite_outline"
-            android:tint="@color/accent_red"
-            android:layout_gravity="center_vertical"/>
+        <!-- 한 줄 의미(리스트에서 요약용) -->
+        <TextView
+            android:id="@+id/textMeaning"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="• 의미 한 줄"
+            android:textColor="@color/text_primary"
+            android:textSize="15sp" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

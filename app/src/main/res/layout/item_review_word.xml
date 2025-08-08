@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="12dp"
+    android:backgroundTint="@color/card_background"
+    app:cardCornerRadius="18dp"
+    app:cardElevation="2dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="18dp">
+
+        <!-- 단어 -->
+        <TextView
+            android:id="@+id/textSpanish"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="spanish"
+            android:textColor="@color/primary_blue"
+            android:textStyle="bold"
+            android:textSize="22sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/buttonFavorite"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- 상단 스피커(단어 발음) -->
+        <ImageButton
+            android:id="@+id/buttonPronounce"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/play_pronunciation"
+            android:src="@drawable/ic_volume_up"
+            app:tint="@color/primary_blue"
+            app:layout_constraintEnd_toStartOf="@+id/buttonFavorite"
+            app:layout_constraintTop_toTopOf="@id/textSpanish"
+            app:layout_constraintBottom_toBottomOf="@id/textSpanish" />
+
+        <!-- 즐겨찾기 -->
+        <ImageButton
+            android:id="@+id/buttonFavorite"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/favorite"
+            android:src="@drawable/ic_favorite_outline"
+            app:tint="@color/accent_red"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/textSpanish"
+            app:layout_constraintBottom_toBottomOf="@id/textSpanish" />
+
+        <!-- 발음 표기 -->
+        <TextView
+            android:id="@+id/textPronunciation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="[발음]"
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp"
+            android:textStyle="italic"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textSpanish" />
+
+        <!-- 뜻(불릿은 어댑터에서 줄바꿈으로 합쳐 넣습니다) -->
+        <TextView
+            android:id="@+id/textMeaning"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textPronunciation" />
+
+        <!-- 예문 라벨 -->
+        <TextView
+            android:id="@+id/textExampleLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:text="예문"
+            android:textColor="@color/primary_blue"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textMeaning" />
+
+        <!-- 스페인어 예문 + 스피커(오른쪽 끝) -->
+        <TextView
+            android:id="@+id/textExample"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Mi padre trabaja en una oficina."
+            android:textColor="@color/text_primary"
+            android:textStyle="italic"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/buttonSpeakExample"
+            app:layout_constraintTop_toBottomOf="@id/textExampleLabel" />
+
+        <ImageButton
+            android:id="@+id/buttonSpeakExample"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/play_pronunciation"
+            android:src="@drawable/ic_volume_up"
+            app:tint="@android:color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/textExample"
+            app:layout_constraintBottom_toBottomOf="@id/textExample" />
+
+        <!-- 예문 해석(회색) -->
+        <TextView
+            android:id="@+id/textExampleTranslation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="우리 아버지는 사무실에서 일해."
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textExample" />
+
+        <!-- 내가 고른 답(틀린 경우만 표시) -->
+        <TextView
+            android:id="@+id/textChosen"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/accent_red"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textExampleTranslation"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

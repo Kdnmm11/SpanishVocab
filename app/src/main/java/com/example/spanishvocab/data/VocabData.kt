@@ -18,4 +18,8 @@ object VocabData {
             Chapter(10, Level.DELE_A2, "날씨", "A2: 날씨/기후 단어", weatherWordsA2)
         )
     }
+
+    fun getFavoriteWords(): List<Word> {
+        return getChapters().flatMap { it.words }.filter { it.isFavorite }
+    }
 }
