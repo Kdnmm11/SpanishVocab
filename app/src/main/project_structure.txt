@@ -1,0 +1,139 @@
+.
+├── all_code.txt
+├── AndroidManifest.xml
+├── java
+│   └── com
+│       └── example
+│           └── spanishvocab
+│               ├── adapter
+│               │   ├── ChapterAdapter.kt
+│               │   ├── LevelAdapter.kt
+│               │   └── WordAdapter.kt
+│               ├── ChapterSelectActivity.kt
+│               ├── data
+│               │   ├── Chapter.kt
+│               │   ├── Level.kt
+│               │   ├── vocabdata
+│               │   │   ├── A1
+│               │   │   │   ├── FamilyWordsA1.kt
+│               │   │   │   ├── FoodWordsA1.kt
+│               │   │   │   ├── GreetingWordsA1.kt
+│               │   │   │   ├── PlaceWordsA1.kt
+│               │   │   │   └── TimeWordsA1.kt
+│               │   │   ├── A2
+│               │   │   │   ├── HealthWordsA2.kt
+│               │   │   │   ├── SchoolWordsA2.kt
+│               │   │   │   ├── ShoppingWordsA2.kt
+│               │   │   │   ├── TravelWords.kt
+│               │   │   │   └── WeatherWordsA2.kt
+│               │   │   ├── B1
+│               │   │   └── B2
+│               │   ├── VocabData.kt
+│               │   └── Word.kt
+│               ├── FavoritesActivity.kt
+│               ├── FavoritesFragment.kt
+│               ├── HomeFragment.kt
+│               ├── LevelSelectActivity.kt
+│               ├── MainActivity.kt
+│               ├── ReviewActivity.kt
+│               ├── SearchActivity.kt
+│               ├── StudyActivity.kt
+│               ├── TestActivity.kt
+│               ├── TestSelectActivity.kt
+│               ├── TestSelectFragment.kt
+│               ├── TtsAvailabilityHelper.kt
+│               ├── WordListActivity.kt
+│               └── WorldDetailActivity.kt
+├── project_structure.txt
+└── res
+    ├── anim
+    │   ├── fade_in.xml
+    │   └── fade_out.xml
+    ├── drawable
+    │   ├── badge_rect_outline.xml
+    │   ├── bg_circle_primary.xml
+    │   ├── button_background.xml
+    │   ├── button_filled.xml
+    │   ├── button_outline.xml
+    │   ├── chip_background.xml
+    │   ├── ic_arrow_back.xml
+    │   ├── ic_arrow_drop_down.xml
+    │   ├── ic_arrow_forward.xml
+    │   ├── ic_arrow_left.xml
+    │   ├── ic_arrow_right.xml
+    │   ├── ic_badge_rounded.xml
+    │   ├── ic_baseline_play_arrow_24.xml
+    │   ├── ic_baseline_volume_up_24.xml
+    │   ├── ic_chevron_left.xml
+    │   ├── ic_chevron_right.xml
+    │   ├── ic_favorite_filled.xml
+    │   ├── ic_favorite_outline.xml
+    │   ├── ic_home.xml
+    │   ├── ic_launcher_background.xml
+    │   ├── ic_launcher_foreground.xml
+    │   ├── ic_levels.xml
+    │   ├── ic_play_arrow.xml
+    │   ├── ic_quiz.xml
+    │   ├── ic_search.xml
+    │   ├── ic_star.xml
+    │   ├── ic_volume_up.xml
+    │   ├── modern_glass_bg.xml
+    │   ├── modern_level_bg.xml
+    │   └── search_background.xml
+    ├── font
+    │   ├── font.xml
+    │   ├── plus_jakarta_sans_bold.ttf
+    │   ├── plus_jakarta_sans_medium.ttf
+    │   └── plus_jakarta_sans_regular.ttf
+    ├── layout
+    │   ├── activity_chapter_list.xml
+    │   ├── activity_chapter_select.xml
+    │   ├── activity_favorites.xml
+    │   ├── activity_level_select.xml
+    │   ├── activity_main.xml
+    │   ├── activity_review.xml
+    │   ├── activity_search.xml
+    │   ├── activity_study.xml
+    │   ├── activity_test_review.xml
+    │   ├── activity_test_select.xml
+    │   ├── activity_test.xml
+    │   ├── activity_word_detail.xml
+    │   ├── activity_word_list.xml
+    │   ├── fragment_favorites.xml
+    │   ├── fragment_home.xml
+    │   ├── fragment_test_select.xml
+    │   ├── item_chapter.xml
+    │   ├── item_level.xml
+    │   ├── item_review_word.xml
+    │   ├── item_review.xml
+    │   └── item_word.xml
+    ├── menu
+    │   ├── bottom_navigation.xml
+    │   └── menu_chapter_list.xml
+    ├── mipmap-anydpi-v26
+    │   ├── ic_launcher_round.xml
+    │   └── ic_launcher.xml
+    ├── mipmap-hdpi
+    │   ├── ic_launcher_round.webp
+    │   └── ic_launcher.webp
+    ├── mipmap-mdpi
+    │   ├── ic_launcher_round.webp
+    │   └── ic_launcher.webp
+    ├── mipmap-xhdpi
+    │   ├── ic_launcher_round.webp
+    │   └── ic_launcher.webp
+    ├── mipmap-xxhdpi
+    │   ├── ic_launcher_round.webp
+    │   └── ic_launcher.webp
+    ├── mipmap-xxxhdpi
+    │   ├── ic_launcher_round.webp
+    │   └── ic_launcher.webp
+    ├── values
+    │   ├── colors.xml
+    │   ├── strings.xml
+    │   └── themes.xml
+    └── xml
+        ├── backup_rules.xml
+        └── data_extraction_rules.xml
+
+26 directories, 111 files
