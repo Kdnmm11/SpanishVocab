@@ -4,45 +4,25 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
-import com.example.spanishvocab.data.Level
 
 class TestSelectFragment : Fragment(R.layout.fragment_test_select) {
 
-    // 레벨 선택 결과 받기: intent에 "selected_level" 로 enum 이름(DELE_A1 등) 반환
-    private val levelPickLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val enumName = result.data?.getStringExtra("selected_level") ?: return@registerForActivityResult
-            // enum 이름 → 표시명 변환 (예: DELE_A1 → "DELE A1")
-            val displayName = runCatching { Level.valueOf(enumName).displayName }
-                .getOrNull() ?: enumName
-            startActivity(
-                Intent(requireContext(), TestActivity::class.java).apply {
-                    putExtra("mode", "level")
-                    putExtra("level", displayName)
-                }
-            )
-        }
-    }
-
-    // 챕터 선택 결과 받기: intent에 "selected_chapter_id" 로 챕터 id 반환
+    // 챕터 선택 결과 받기
     private val chapterPickLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val chapterId = result.data?.getIntExtra("selected_chapter_id", -1) ?: -1
             if (chapterId != -1) {
-                startActivity(
-                    Intent(requireContext(), TestActivity::class.java).apply {
-                        putExtra("mode", "chapter")
-                        putExtra("chapterId", chapterId)
-                    }
-                )
+                startActivity(Intent(requireContext(), TestActivity::class.java).apply {
+                    putExtra("mode", "chapter")
+                    putExtra("chapterId", chapterId)
+                })
             }
         }
     }
@@ -50,31 +30,38 @@ class TestSelectFragment : Fragment(R.layout.fragment_test_select) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 툴바 타이틀 보정 및 레벨 선택 UI 숨김(메인 정책과 동일)
-        requireActivity().findViewById<TextView>(R.id.toolbarTitle)?.text = "테스트 방식 선택"
-        (requireActivity() as? MainActivity)?.showLevelSelector(false)
+        // 툴바 제목 설정
+        requireActivity().findViewById<TextView>(R.id.toolbarTitle)?.text = "테스트 모드"
 
-        // 카드: 레벨별 테스트
-        view.findViewById<CardView>(R.id.cardLevel).setOnClickListener {
-            val i = Intent(requireContext(), LevelSelectActivity::class.java)
-            i.putExtra("forTest", true) // ★ 테스트 모드로 실행 (선택 결과만 반환)
-            levelPickLauncher.launch(i)
+        // ★ [중요] 여기에 있던 showLevelSelector(false) 코드를 삭제했습니다.
+        // (MainActivity에서 해당 함수를 지웠으므로, 여기서 호출하면 에러가 납니다.)
+
+        // 1. 챕터별 퀴즈
+        view.findViewById<CardView>(R.id.cardChapterQuiz).setOnClickListener {
+            val intent = Intent(requireContext(), ChapterSelectActivity::class.java)
+            intent.putExtra("forTest", true)
+            chapterPickLauncher.launch(intent)
         }
 
-        // 카드: 챕터별 테스트
-        view.findViewById<CardView>(R.id.cardChapter).setOnClickListener {
-            val i = Intent(requireContext(), ChapterSelectActivity::class.java)
-            i.putExtra("forTest", true) // ★ 테스트용 챕터 선택
-            chapterPickLauncher.launch(i)
+        // 2. 즐겨찾기 퀴즈
+        view.findViewById<CardView>(R.id.cardFavoriteQuiz).setOnClickListener {
+            startActivity(Intent(requireContext(), TestActivity::class.java).apply {
+                putExtra("mode", "favorite")
+            })
         }
 
-        // 카드: 즐겨찾기 테스트
-        view.findViewById<CardView>(R.id.cardFavorite).setOnClickListener {
-            startActivity(
-                Intent(requireContext(), TestActivity::class.java).apply {
-                    putExtra("mode", "favorite")
-                }
-            )
+        // 3. 딕테이션 레벨 선택 (A2, B1, B2 - 예문 난이도)
+        val onDictationClick = View.OnClickListener { v ->
+            // 버튼의 텍스트(A2, B1, B2)를 그대로 가져와서 DictationActivity로 넘깁니다.
+            val level = (v as Button).text.toString()
+            startActivity(Intent(requireContext(), DictationActivity::class.java).apply {
+                putExtra("level", level)
+            })
         }
+
+        // XML의 버튼 ID와 상관없이 클릭 시 텍스트를 가져오도록 연결
+        view.findViewById<Button>(R.id.btnLevelA1).setOnClickListener(onDictationClick)
+        view.findViewById<Button>(R.id.btnLevelA2).setOnClickListener(onDictationClick)
+        view.findViewById<Button>(R.id.btnLevelB1).setOnClickListener(onDictationClick)
     }
 }

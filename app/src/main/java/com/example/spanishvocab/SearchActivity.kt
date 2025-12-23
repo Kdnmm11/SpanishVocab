@@ -5,93 +5,116 @@ import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.text.Editable
 import android.text.TextWatcher
-import android.widget.TextView
+import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.spanishvocab.adapter.WordAdapter
-import com.example.spanishvocab.data.VocabData
 import com.example.spanishvocab.data.Word
-import com.google.android.material.textfield.TextInputEditText
+import com.example.spanishvocab.repository.WordRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.Locale
 
-class SearchActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
+class SearchActivity : AppCompatActivity() {
 
-    private lateinit var wordAdapter: WordAdapter
-    private lateinit var allWords: List<Word>
-    private var tts: TextToSpeech? = null
+    private lateinit var adapter: WordAdapter
+    private lateinit var tts: TextToSpeech
+    private lateinit var repo: WordRepository
+    private var allWords: List<Word> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        findViewById<TextView>(R.id.toolbarTitle).text = "검색"
+        repo = WordRepository(this)
 
-        // 모든 단어 로드
-        allWords = VocabData.getChapters().flatMap { it.words }
+        // 1. 툴바 설정
+        val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        // TTS 준비
-        tts = TextToSpeech(this, this)
+        findViewById<ImageButton>(R.id.btnBack).setOnClickListener {
+            finish()
+        }
 
-        // 어댑터: 카드 탭 → 상세, 하트 탭 → 즐겨찾기, 스피커 탭 → 발음 재생
-        wordAdapter = WordAdapter(
-            words = allWords,
-            onWordClick = { word ->
-                val current = ArrayList(wordAdapter.currentItems())
-                val i = Intent(this, WordDetailActivity::class.java)
-                i.putExtra("word", word)
-                i.putExtra("words", current)
-                startActivity(i)
-            },
-            onFavoriteClick = { word ->
-                word.isFavorite = !word.isFavorite
-                // 전역 데이터 동기화
-                VocabData.getChapters().forEach { ch ->
-                    ch.words.find { it.id == word.id }?.isFavorite = word.isFavorite
-                }
-                // 현재 목록 새로고침(필터 유지)
-                wordAdapter.updateWords(wordAdapter.currentItems())
-            },
-            onPronounceClick = { word ->
-                tts?.speak(word.spanish, TextToSpeech.QUEUE_FLUSH, null, null)
+        // 2. 리스트 설정
+        val recyclerView = findViewById<RecyclerView>(R.id.recyclerViewSearch)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        adapter = WordAdapter(
+            words = emptyList(),
+            onPronounceClick = { word -> speakOut(word.spanish) },
+            onFavoriteClick = { word -> toggleFavorite(word) },
+            onItemClick = { word ->
+                val intent = Intent(this, WordDetailActivity::class.java)
+                intent.putExtra("word", word)
+                intent.putParcelableArrayListExtra("words", ArrayList(adapter.currentItems))
+                startActivity(intent)
             }
         )
+        recyclerView.adapter = adapter
 
-        val recycler = findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.recyclerViewSearch)
-        recycler.layoutManager = LinearLayoutManager(this)
-        recycler.adapter = wordAdapter
-
-        val editSearch = findViewById<TextInputEditText>(R.id.editSearch)
+        // 3. 검색창 설정 (EditText로 변경됨)
+        val editSearch = findViewById<EditText>(R.id.editSearch)
         editSearch.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) = filterWords(s?.toString())
+            override fun afterTextChanged(s: Editable?) { filter(s.toString()) }
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
+
+        initTTS()
+        loadAllWords()
     }
 
-    override fun onInit(status: Int) {
-        if (status == TextToSpeech.SUCCESS) {
-            tts?.language = Locale("es", "ES")
-        }
-    }
+    private fun loadAllWords() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val words = repo.getAllWords()
+            allWords = words
 
-    // 🔎 단어/발음/뜻만 검색(예문/해석 제외)
-    private fun filterWords(query: String?) {
-        val text = query?.trim()?.lowercase() ?: ""
-        val filtered = if (text.isEmpty()) {
-            allWords
-        } else {
-            allWords.filter { w ->
-                w.spanish.lowercase().contains(text) ||                       // 스페인어 단어
-                        (w.pronunciation?.lowercase()?.contains(text) == true) ||     // 발음
-                        w.meanings.any { it.lowercase().contains(text) }              // 뜻
+            withContext(Dispatchers.Main) {
+                if (words.isNotEmpty()) {
+                    adapter.updateWords(allWords)
+                } else {
+                    Toast.makeText(this@SearchActivity, "단어 데이터가 없습니다.", Toast.LENGTH_SHORT).show()
+                }
             }
         }
-        wordAdapter.updateWords(filtered)
+    }
+
+    private fun filter(text: String) {
+        if (text.isBlank()) {
+            adapter.updateWords(allWords)
+            return
+        }
+
+        val filtered = allWords.filter {
+            it.spanish.contains(text, true) || it.meanings.contains(text, true)
+        }
+        adapter.updateWords(filtered)
+    }
+
+    private fun toggleFavorite(word: Word) {
+        word.isFavorite = !word.isFavorite
+        adapter.notifyDataSetChanged()
+    }
+
+    private fun initTTS() {
+        tts = TextToSpeech(this) { status ->
+            if (status == TextToSpeech.SUCCESS) tts.setLanguage(Locale("es", "ES"))
+        }
+    }
+
+    private fun speakOut(text: String) {
+        if (::tts.isInitialized) tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
     }
 
     override fun onDestroy() {
-        tts?.stop()
-        tts?.shutdown()
+        if (::tts.isInitialized) { tts.stop(); tts.shutdown() }
         super.onDestroy()
     }
 }

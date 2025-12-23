@@ -1,15 +1,17 @@
 package com.example.spanishvocab
 
+import android.graphics.Color
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
+import android.view.Gravity
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -21,19 +23,24 @@ class StudyActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private lateinit var toolbar: Toolbar
     private lateinit var toolbarTitle: TextView
     private lateinit var progressText: TextView
-    private lateinit var wordCard: CardView
     private lateinit var spanishText: TextView
-    private lateinit var pronunciationText: TextView
-    private lateinit var meaningLayout: View
-    private lateinit var meaningText: TextView
-    private lateinit var exampleLayout: View
-    private lateinit var exampleText: TextView
-    private lateinit var exampleTranslationText: TextView
-    private lateinit var pronounceButton: ImageButton
-    private lateinit var pronounceExampleButton: ImageButton
-    private lateinit var favoriteButton: ImageButton
+
+    // 뜻 섹션
     private lateinit var showMeaningButton: Button
+    private lateinit var layoutMeaningContainer: View
+    private lateinit var meaningText: TextView
+    private lateinit var layoutIdiom: View
+    private lateinit var idiomText: TextView
+    private lateinit var layoutConjugation: View
+    private lateinit var conjugationText: TextView
+
+    // 예문 섹션
     private lateinit var showExampleButton: Button
+    private lateinit var layoutExampleContainer: View
+    private lateinit var dynamicExampleContent: LinearLayout
+
+    private lateinit var pronounceButton: ImageButton
+    private lateinit var favoriteButton: ImageButton
     private lateinit var nextButton: Button
     private lateinit var previousButton: Button
 
@@ -42,7 +49,6 @@ class StudyActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private var currentIndex = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        // 상태바 색상(메인과 일관)
         WindowCompat.setDecorFitsSystemWindows(window, true)
         window.statusBarColor = ContextCompat.getColor(this, R.color.primary_blue)
         WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = false
@@ -66,41 +72,37 @@ class StudyActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         toolbar = findViewById(R.id.toolbar)
         toolbarTitle = findViewById(R.id.toolbarTitle)
         progressText = findViewById(R.id.textProgress)
-        wordCard = findViewById(R.id.cardWord)
         spanishText = findViewById(R.id.textSpanish)
-        pronunciationText = findViewById(R.id.textPronunciation)
-        meaningLayout = findViewById(R.id.layoutMeaning)
-        meaningText = findViewById(R.id.textMeaning)
-        exampleLayout = findViewById(R.id.layoutExample)
-        exampleText = findViewById(R.id.textExample)
-        exampleTranslationText = findViewById(R.id.textExampleTranslation)
-        pronounceButton = findViewById(R.id.buttonPronounce)
-        pronounceExampleButton = findViewById(R.id.buttonPronounceExample)
-        favoriteButton = findViewById(R.id.buttonFavorite)
+
+        // 뜻 관련 뷰
         showMeaningButton = findViewById(R.id.buttonShowMeaning)
+        layoutMeaningContainer = findViewById(R.id.layoutMeaningContainer)
+        meaningText = findViewById(R.id.textMeaning)
+        layoutIdiom = findViewById(R.id.layoutIdiom)
+        idiomText = findViewById(R.id.textIdiom)
+        layoutConjugation = findViewById(R.id.layoutConjugation)
+        conjugationText = findViewById(R.id.textConjugation)
+
+        // 예문 관련 뷰
         showExampleButton = findViewById(R.id.buttonShowExample)
+        layoutExampleContainer = findViewById(R.id.layoutExampleContainer)
+        dynamicExampleContent = findViewById(R.id.dynamicExampleContent)
+
+        pronounceButton = findViewById(R.id.buttonPronounce)
+        favoriteButton = findViewById(R.id.buttonFavorite)
         nextButton = findViewById(R.id.buttonNext)
         previousButton = findViewById(R.id.buttonPrevious)
 
         toolbarTitle.text = "Study Mode"
 
         pronounceButton.setOnClickListener { pronounceWord() }
-        pronounceExampleButton.setOnClickListener { pronounceExample() }
         favoriteButton.setOnClickListener { toggleFavorite() }
+
         showMeaningButton.setOnClickListener { showMeaning() }
         showExampleButton.setOnClickListener { showExample() }
+
         nextButton.setOnClickListener { nextWord() }
         previousButton.setOnClickListener { previousWord() }
-    }
-
-    private fun setupTTS() {
-        tts = TextToSpeech(this, this)
-    }
-
-    override fun onInit(status: Int) {
-        if (status == TextToSpeech.SUCCESS) {
-            tts?.language = Locale("es", "ES")
-        }
     }
 
     private fun displayWord() {
@@ -108,14 +110,25 @@ class StudyActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
         progressText.text = "${currentIndex + 1} / ${wordsList.size}"
         spanishText.text = word.spanish
-        pronunciationText.text = "[${word.pronunciation}]"
-        meaningText.text = word.meanings.joinToString("\n• ", "• ")
-        exampleText.text = word.example
-        exampleTranslationText.text = word.exampleTranslation
 
-        // 초기 상태
-        meaningLayout.visibility = View.GONE
-        exampleLayout.visibility = View.GONE
+        meaningText.text = word.meanings
+
+        if (word.idiom.isNotBlank()) {
+            layoutIdiom.visibility = View.VISIBLE
+            idiomText.text = word.idiom
+        } else {
+            layoutIdiom.visibility = View.GONE
+        }
+
+        if (word.conjugation.isNotBlank()) {
+            layoutConjugation.visibility = View.VISIBLE
+            conjugationText.text = word.conjugation
+        } else {
+            layoutConjugation.visibility = View.GONE
+        }
+
+        layoutMeaningContainer.visibility = View.GONE
+        layoutExampleContainer.visibility = View.GONE
         showMeaningButton.visibility = View.VISIBLE
         showExampleButton.visibility = View.VISIBLE
 
@@ -132,6 +145,7 @@ class StudyActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private fun updateNavButtons() {
         previousButton.isEnabled = currentIndex > 0
+        previousButton.alpha = if (previousButton.isEnabled) 1.0f else 0.3f
         nextButton.text = if (currentIndex < wordsList.size - 1) "다음" else "완료"
     }
 
@@ -146,21 +160,68 @@ class StudyActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         tts?.speak(word.spanish, TextToSpeech.QUEUE_FLUSH, null, null)
     }
 
-    private fun pronounceExample() {
-        val word = wordsList[currentIndex]
-        if (word.example.isNotBlank()) {
-            tts?.speak(word.example, TextToSpeech.QUEUE_FLUSH, null, null)
-        }
-    }
-
     private fun showMeaning() {
-        meaningLayout.visibility = View.VISIBLE
+        layoutMeaningContainer.visibility = View.VISIBLE
         showMeaningButton.visibility = View.GONE
     }
 
     private fun showExample() {
-        exampleLayout.visibility = View.VISIBLE
+        layoutExampleContainer.visibility = View.VISIBLE
         showExampleButton.visibility = View.GONE
+
+        // 예문 생성 (WordDetailActivity와 동일 로직)
+        displaySmartExamples(wordsList[currentIndex].example)
+    }
+
+    private fun displaySmartExamples(fullExampleText: String) {
+        dynamicExampleContent.removeAllViews()
+        if (fullExampleText.isBlank()) return
+
+        val lines = fullExampleText.split("\n")
+
+        for (i in lines.indices) {
+            val line = lines[i].trim()
+            if (line.isBlank()) continue
+
+            val isKorean = line.any { it.code in 0xAC00..0xD7A3 }
+            val topMargin = if (isKorean) 0 else 16
+            val finalTopMargin = if (dynamicExampleContent.childCount == 0) 0 else topMargin
+
+            val rowLayout = LinearLayout(this).apply {
+                orientation = LinearLayout.HORIZONTAL
+                gravity = Gravity.CENTER_VERTICAL
+                val params = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+                params.setMargins(0, finalTopMargin, 0, 0)
+                layoutParams = params
+            }
+
+            val textView = TextView(this).apply {
+                text = line
+                textSize = if (isKorean) 15f else 16f
+                setTextColor(Color.parseColor(if (isKorean) "#666666" else "#333333"))
+                layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+            }
+            rowLayout.addView(textView)
+
+            if (!isKorean) {
+                val speakBtn = ImageButton(this).apply {
+                    setImageResource(R.drawable.ic_volume_up)
+                    setColorFilter(ContextCompat.getColor(context, R.color.primary_blue))
+                    setBackgroundResource(android.R.color.transparent)
+                    layoutParams = LinearLayout.LayoutParams(60, 60)
+                    setPadding(10, 10, 10, 10)
+                    setOnClickListener {
+                        val cleanText = line.replace(Regex("^\\d+\\."), "").trim()
+                        tts?.speak(cleanText, TextToSpeech.QUEUE_FLUSH, null, null)
+                    }
+                }
+                rowLayout.addView(speakBtn)
+            }
+            dynamicExampleContent.addView(rowLayout)
+        }
     }
 
     private fun previousWord() {
@@ -179,9 +240,7 @@ class StudyActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         }
     }
 
-    override fun onDestroy() {
-        tts?.stop()
-        tts?.shutdown()
-        super.onDestroy()
-    }
+    private fun setupTTS() { tts = TextToSpeech(this, this) }
+    override fun onInit(status: Int) { if (status == TextToSpeech.SUCCESS) tts?.language = Locale("es", "ES") }
+    override fun onDestroy() { tts?.stop(); tts?.shutdown(); super.onDestroy() }
 }

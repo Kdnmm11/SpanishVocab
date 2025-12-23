@@ -2,302 +2,276 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_gray">
+    android:background="#F5F5F5">
 
-    <!-- Toolbar (88dp) -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="88dp"
         android:background="@color/primary_blue"
         android:elevation="0dp"
-        app:title=""
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- 가운데 타이틀 -->
     <TextView
         android:id="@+id/toolbarTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Study Mode"
         android:textColor="@android:color/white"
-        android:textSize="22sp"
+        android:textSize="20sp"
         android:textStyle="bold"
-        android:fontFamily="sans-serif-medium"
-        android:gravity="center"
-        app:layout_constraintTop_toTopOf="@id/toolbar"
         app:layout_constraintBottom_toBottomOf="@id/toolbar"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias="0.70" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/toolbar"
+        app:layout_constraintVertical_bias="0.696" />
 
-    <!-- 진행도 -->
     <TextView
         android:id="@+id/textProgress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="1 / 5"
-        android:textColor="@color/text_secondary"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="1 / 10"
+        android:textColor="@android:color/white"
         android:textSize="16sp"
-        android:layout_marginTop="14dp"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="@id/toolbar"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- 단어 카드 -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardWord"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="12dp"
-        android:backgroundTint="@color/card_background"
-        app:cardCornerRadius="20dp"
-        app:cardElevation="2dp"
-        app:layout_constraintTop_toBottomOf="@id/textProgress"
-        app:layout_constraintBottom_toTopOf="@id/navBottom"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias="0.42">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavContainer"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="28dp">
+            android:padding="16dp"
+            android:orientation="vertical">
 
-            <!-- 상단: 단어/발음/버튼 -->
-            <LinearLayout
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardWord"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp">
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:padding="24dp">
 
-                    <TextView
-                        android:id="@+id/textSpanish"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Spanish"
-                        android:textColor="@color/primary_blue"
-                        android:textSize="27sp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/textSpanish"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Spanish"
+                            android:textColor="@color/primary_blue"
+                            android:textSize="36sp"
+                            android:textStyle="bold" />
+
+                        <ImageButton
+                            android:id="@+id/buttonPronounce"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:src="@drawable/ic_volume_up"
+                            app:tint="@color/primary_blue" />
+
+                        <ImageButton
+                            android:id="@+id/buttonFavorite"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_marginStart="8dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:src="@drawable/ic_favorite_outline"
+                            app:tint="@color/accent_red" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="#E0E0E0" />
+
+                    <Button
+                        android:id="@+id/buttonShowMeaning"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="#EDE7F6"
+                        android:text="뜻 보기"
+                        android:textColor="#4A148C"
                         android:textStyle="bold"
-                        android:fontFamily="sans-serif-black"/>
+                        app:cornerRadius="12dp"
+                        app:icon="@drawable/ic_visibility"
+                        app:iconTint="#4A148C" />
 
-                    <TextView
-                        android:id="@+id/textPronunciation"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/layoutMeaningContainer"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="3dp"
-                        android:text="[발음]"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="16sp"
-                        android:textStyle="italic"/>
-                </LinearLayout>
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
-                <ImageButton
-                    android:id="@+id/buttonPronounce"
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
-                    android:background="?android:attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="@string/play_pronunciation"
-                    android:src="@drawable/ic_volume_up"
-                    app:tint="@color/primary_blue"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="뜻"
+                            android:textColor="#4A148C"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
 
-                <ImageButton
-                    android:id="@+id/buttonFavorite"
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
-                    android:background="?android:attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="@string/favorite"
-                    android:src="@drawable/ic_favorite_outline"
-                    app:tint="@color/accent_red"/>
-            </LinearLayout>
+                        <TextView
+                            android:id="@+id/textMeaning"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:layout_marginBottom="16dp"
+                            android:lineSpacingExtra="4dp"
+                            android:text="의미 내용"
+                            android:textColor="#333333"
+                            android:textSize="18sp" />
 
-            <!-- 뜻 -->
-            <LinearLayout
-                android:id="@+id/layoutMeaning"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="22dp"
-                android:orientation="vertical"
-                android:visibility="gone">
+                        <LinearLayout
+                            android:id="@+id/layoutIdiom"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="관용구"
+                                android:textColor="#4A148C"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+                            <TextView
+                                android:id="@+id/textIdiom"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:layout_marginBottom="20dp"
+                                android:text="관용구 내용"
+                                android:textColor="#333333"
+                                android:textSize="16sp" />
+                        </LinearLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/light_blue"
-                    android:alpha="0.5" />
+                        <LinearLayout
+                            android:id="@+id/layoutConjugation"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="동사 활용"
+                                android:textColor="#4A148C"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+                            <TextView
+                                android:id="@+id/textConjugation"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:layout_marginBottom="16dp"
+                                android:text="활용 내용"
+                                android:textColor="#333333"
+                                android:textSize="15sp" />
+                        </LinearLayout>
+                    </LinearLayout>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:text="@string/meaning"
-                    android:textColor="@color/primary_blue"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/textMeaning"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:text="뜻"
-                    android:textColor="@color/text_primary"
-                    android:textSize="16sp"
-                    android:lineSpacingExtra="7dp" />
-            </LinearLayout>
-
-            <!-- 예문 -->
-            <LinearLayout
-                android:id="@+id/layoutExample"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="22dp"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/light_blue"
-                    android:alpha="0.5" />
-
-                <!-- 예문 타이틀 + 재생 버튼 -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
-
-                    <TextView
-                        android:layout_width="0dp"
+                    <Button
+                        android:id="@+id/buttonShowExample"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/example"
-                        android:textColor="@color/primary_blue"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:layout_marginTop="8dp"
+                        android:backgroundTint="#EDE7F6"
+                        android:text="예문 보기"
+                        android:textColor="#4A148C"
+                        android:textStyle="bold"
+                        app:cornerRadius="12dp"
+                        app:icon="@drawable/ic_visibility"
+                        app:iconTint="#4A148C" />
 
-                    <ImageButton
-                        android:id="@+id/buttonPronounceExample"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        android:background="?android:attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="@string/play_pronunciation"
-                        android:src="@drawable/ic_volume_up"
-                        app:tint="@color/primary_blue"/>
+                    <LinearLayout
+                        android:id="@+id/layoutExampleContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="예문"
+                            android:textColor="#4A148C"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:id="@+id/dynamicExampleContent"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:orientation="vertical" />
+                    </LinearLayout>
+
                 </LinearLayout>
-
-                <TextView
-                    android:id="@+id/textExample"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:text="Example"
-                    android:textColor="@color/text_primary"
-                    android:textSize="16sp"
-                    android:textStyle="italic" />
-
-                <TextView
-                    android:id="@+id/textExampleTranslation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="예문 해석"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="14sp"/>
-            </LinearLayout>
+            </androidx.cardview.widget.CardView>
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
+    </ScrollView>
 
-    <!-- 뜻/예문 토글 버튼 -->
     <LinearLayout
-        android:id="@+id/rowToggles"
-        android:orientation="horizontal"
+        android:id="@+id/bottomNavContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_marginHorizontal="22dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/cardWord"
-        app:layout_constraintBottom_toTopOf="@id/navBottom"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <Button
-            android:id="@+id/buttonShowMeaning"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="48dp"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/button_outline"
-            android:text="뜻 보기"
-            android:textColor="@color/primary_blue"
-            android:textSize="15sp"
-            android:textStyle="bold"/>
-
-        <Button
-            android:id="@+id/buttonShowExample"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="48dp"
-            android:layout_marginStart="10dp"
-            android:background="@drawable/button_outline"
-            android:text="예문 보기"
-            android:textColor="@color/primary_blue"
-            android:textSize="15sp"
-            android:textStyle="bold"/>
-    </LinearLayout>
-
-    <!-- 하단 내비 버튼 -->
-    <LinearLayout
-        android:id="@+id/navBottom"
+        android:background="#F5F5F5"
         android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="22dp"
-        android:layout_marginBottom="50dp"
-        android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <Button
             android:id="@+id/buttonPrevious"
             android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="52dp"
+            android:layout_height="60dp"
             android:layout_marginEnd="8dp"
-            android:background="@drawable/button_background"
+            android:layout_weight="1"
+            android:backgroundTint="@color/primary_blue"
             android:text="이전"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:textStyle="bold"/>
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:cornerRadius="12dp" />
 
         <Button
             android:id="@+id/buttonNext"
             android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="8dp"
             android:layout_weight="1"
-            android:layout_height="52dp"
-            android:background="@drawable/button_background"
+            android:backgroundTint="@color/primary_blue"
             android:text="다음"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:textStyle="bold"/>
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:cornerRadius="12dp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

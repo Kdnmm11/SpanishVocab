@@ -1,223 +1,188 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/testSelectRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_gray">
+    android:background="#F5F5F5"
+    android:fillViewport="true">
 
-    <!-- 카드: 레벨별 테스트 -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardLevel"
-        android:layout_width="0dp"
-        android:layout_height="110dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="14dp"
-        android:backgroundTint="@color/card_background"
-        app:cardCornerRadius="18dp"
-        app:cardElevation="2dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/cardChapter"
-        app:layout_constraintVertical_chainStyle="packed">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
 
-        <LinearLayout
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1. 단어 퀴즈"
+            android:textColor="@color/primary_blue"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="12dp"/>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardChapterQuiz"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:paddingStart="18dp"
-            android:paddingEnd="12dp"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp">
-
-            <!-- 보라 테두리 배지: Lv (L 대문자, v 소문자) -->
-            <TextView
-                android:id="@+id/badgeLevel"
-                android:layout_width="36dp"
-                android:layout_height="40dp"
-                android:gravity="center"
-                android:text="Lv"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:includeFontPadding="false"
-                android:textColor="@color/primary_blue"
-                android:background="@drawable/button_outline" />
-
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="#FFFFFF">
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:paddingStart="14dp"
-                android:paddingEnd="8dp">
-
-                <TextView
-                    android:id="@+id/titleLevel"
-                    android:layout_width="wrap_content"
+                android:padding="20dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_search"
+                    app:tint="@color/primary_blue"/>
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="레벨별 테스트"
-                    android:textColor="@color/primary_blue"
-                    android:textStyle="bold"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="A1 · A2 · B1 · B2 중 하나를 선택해 해당 레벨 단어만 출제"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="14sp" />
+                    android:layout_weight="1"
+                    android:layout_marginStart="16dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="챕터별 퀴즈"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="#333333"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="특정 챕터를 골라 4지선다 풀기"
+                        android:textSize="14sp"
+                        android:textColor="#888888"/>
+                </LinearLayout>
             </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/ic_chevron_right"
-                app:tint="@color/primary_blue" />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
-    <!-- 카드: 챕터별 테스트 -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardChapter"
-        android:layout_width="0dp"
-        android:layout_height="110dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="14dp"
-        android:backgroundTint="@color/card_background"
-        app:cardCornerRadius="18dp"
-        app:cardElevation="2dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cardLevel"
-        app:layout_constraintBottom_toTopOf="@id/cardFavorite">
-
-        <LinearLayout
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardFavoriteQuiz"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:paddingStart="18dp"
-            android:paddingEnd="12dp"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp">
-
-            <!-- 보라 테두리 배지: Ch -->
-            <TextView
-                android:id="@+id/badgeChapter"
-                android:layout_width="36dp"
-                android:layout_height="40dp"
-                android:gravity="center"
-                android:text="Ch"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:includeFontPadding="false"
-                android:textColor="@color/primary_blue"
-                android:background="@drawable/button_outline" />
-
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="#FFFFFF">
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:paddingStart="14dp"
-                android:paddingEnd="8dp">
-
-                <TextView
-                    android:id="@+id/titleChapter"
-                    android:layout_width="wrap_content"
+                android:padding="20dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_favorite_filled"
+                    app:tint="@color/accent_red"/>
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="챕터별 테스트"
-                    android:textColor="@color/primary_blue"
-                    android:textStyle="bold"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="현재 선택된 레벨에서 챕터 하나를 골라 해당 챕터만 출제"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="14sp" />
+                    android:layout_weight="1"
+                    android:layout_marginStart="16dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="즐겨찾기 퀴즈"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="#333333"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="내가 하트 표시한 단어만 출제"
+                        android:textSize="14sp"
+                        android:textColor="#888888"/>
+                </LinearLayout>
             </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/ic_chevron_right"
-                app:tint="@color/primary_blue" />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2. 문장 딕테이션"
+            android:textColor="@color/primary_blue"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="12dp"/>
 
-    <!-- 카드: 즐겨찾기 테스트 -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardFavorite"
-        android:layout_width="0dp"
-        android:layout_height="110dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:backgroundTint="@color/card_background"
-        app:cardCornerRadius="18dp"
-        app:cardElevation="2dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cardChapter"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <LinearLayout
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardDictation"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:paddingStart="18dp"
-            android:paddingEnd="12dp"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp">
-
-            <ImageView
-                android:id="@+id/ivFav"
-                android:layout_width="26dp"
-                android:layout_height="26dp"
-                android:src="@drawable/ic_favorite_filled"
-                app:tint="@color/primary_blue" />
-
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="#E8EAF6">
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:paddingStart="14dp"
-                android:paddingEnd="8dp">
+                android:padding="24dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_volume_up"
+                        app:tint="@color/primary_blue"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:text="듣고 받아쓰기"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/primary_blue"/>
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/titleFavorite"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="즐겨찾기 테스트"
-                    android:textColor="@color/primary_blue"
-                    android:textStyle="bold"
-                    android:textSize="18sp" />
+                    android:layout_marginTop="8dp"
+                    android:text="원어민 발음을 듣고 스페인어 문장을 완성하세요."
+                    android:textColor="#5C6BC0"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="내가 하트한 단어만 랜덤 출제 (4개 이상일 때 추천)"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="14sp" />
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal">
+                    <Button
+                        android:id="@+id/btnLevelA1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="A2"
+                        android:layout_marginEnd="8dp"/>
+                    <Button
+                        android:id="@+id/btnLevelA2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="B1"
+                        android:layout_marginEnd="8dp"/>
+                    <Button
+                        android:id="@+id/btnLevelB1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="B2"/>
+                </LinearLayout>
             </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/ic_chevron_right"
-                app:tint="@color/primary_blue" />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

@@ -4,21 +4,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spanishvocab.R
 import com.example.spanishvocab.data.Chapter
 
 class ChapterAdapter(
-    private var chapters: List<Chapter>,
-    private val onChapterClick: (Chapter) -> Unit
+    private var chapters: List<Chapter>, // var로 변경하여 수정 가능하게 함
+    private val onItemClick: (Chapter) -> Unit
 ) : RecyclerView.Adapter<ChapterAdapter.ChapterViewHolder>() {
 
     class ChapterViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val cardView: CardView = view.findViewById(R.id.cardChapter)
-        val titleText: TextView = view.findViewById(R.id.textChapterTitle)
-        val descriptionText: TextView = view.findViewById(R.id.textChapterDescription)
-        val wordCountText: TextView = view.findViewById(R.id.textWordCount)
+        val title: TextView = view.findViewById(R.id.textChapterTitle)
+        val count: TextView = view.findViewById(R.id.textWordCount)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChapterViewHolder {
@@ -29,19 +26,20 @@ class ChapterAdapter(
 
     override fun onBindViewHolder(holder: ChapterViewHolder, position: Int) {
         val chapter = chapters[position]
-        holder.titleText.text = chapter.title
-        holder.descriptionText.text = chapter.description
-        holder.wordCountText.text = "${chapter.words.size} 단어"
-        holder.cardView.setOnClickListener {
-            onChapterClick(chapter)
+
+        holder.title.text = chapter.title
+        holder.count.text = "${chapter.words.size} 단어"
+
+        holder.itemView.setOnClickListener {
+            onItemClick(chapter)
         }
     }
 
     override fun getItemCount() = chapters.size
 
-    // ★★ 반드시 아래 함수 추가! ★★
+    // ★ [추가됨] 리스트 갱신 함수
     fun updateChapters(newChapters: List<Chapter>) {
-        chapters = newChapters
+        this.chapters = newChapters
         notifyDataSetChanged()
     }
 }

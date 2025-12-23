@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,7 +15,6 @@
         android:theme="@style/Theme.SpanishVocab"
         tools:targetApi="31">
 
-        <!-- 메인 액티비티(런처) -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -24,7 +25,6 @@
             </intent-filter>
         </activity>
 
-        <!-- 레벨 선택 액티비티 -->
         <activity
             android:name=".LevelSelectActivity"
             android:exported="false"
@@ -39,33 +39,38 @@
             android:name=".FavoritesActivity"
             android:exported="false"
             android:theme="@style/Theme.SpanishVocab" />
+
         <activity
             android:name=".TestActivity"
             android:exported="false"
             android:theme="@style/Theme.SpanishVocab" />
+
         <activity
             android:name=".StudyActivity"
             android:exported="false"
             android:theme="@style/Theme.SpanishVocab" />
+
         <activity
             android:name=".SearchActivity"
             android:exported="false"
             android:theme="@style/Theme.SpanishVocab" />
 
-        <!-- 🟢 반드시 추가! WordDetailActivity -->
         <activity
             android:name=".WordDetailActivity"
             android:exported="false"
             android:theme="@style/Theme.SpanishVocab" />
 
         <activity
-            android:name=".TestSelectActivity"
-            android:exported="false" />
+            android:name=".ChapterSelectActivity"
+            android:exported="false"/>
 
-        <activity android:name=".ChapterSelectActivity" android:exported="false"/>
+        <activity
+            android:name=".ReviewActivity" />
 
-        <activity android:name=".ReviewActivity" />
+        <activity
+            android:name=".DictationActivity"
+            android:exported="false"
+            android:theme="@style/Theme.SpanishVocab" />
 
-        <!-- ...필요하면 또 다른 액티비티 추가 -->
     </application>
 </manifest>

@@ -1,28 +1,35 @@
 package com.example.spanishvocab
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spanishvocab.adapter.ChapterAdapter
-import com.example.spanishvocab.data.Level
-import com.example.spanishvocab.data.VocabData
-import com.example.spanishvocab.data.Chapter
+import com.example.spanishvocab.repository.WordRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private lateinit var recycler: RecyclerView
+    private lateinit var progressBar: ProgressBar
     private lateinit var adapter: ChapterAdapter
+    private lateinit var repo: WordRepository
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        repo = WordRepository(requireContext())
         recycler = view.findViewById(R.id.recyclerViewChapters)
+        progressBar = view.findViewById(R.id.progressBar)
 
-        adapter = ChapterAdapter(listOf()) { chapter: Chapter ->
+        adapter = ChapterAdapter(listOf()) { chapter ->
             val intent = Intent(requireContext(), WordListActivity::class.java)
             intent.putExtra("chapter", chapter)
             startActivity(intent)
@@ -31,26 +38,57 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         recycler.layoutManager = LinearLayoutManager(requireContext())
         recycler.adapter = adapter
 
-        // 최초 데이터 적용
-        applyChaptersForSelectedLevel()
+        loadChaptersFromDB()
     }
 
     override fun onResume() {
         super.onResume()
-        // 돌아올 때도 현재 선택 레벨 기준으로 갱신
-        applyChaptersForSelectedLevel()
+        loadChaptersFromDB()
+
+        // ★ [핵심] MainActivity에 있는 버튼 활성화 & 클릭 이벤트 연결
+        if (activity is MainActivity) {
+            (activity as MainActivity).setSyncButton(true) {
+                // 버튼 눌렀을 때 실행할 내용
+                syncData()
+            }
+        }
     }
 
-    private fun applyChaptersForSelectedLevel() {
-        val chapters = VocabData.getChapters()
-        val selected = getSelectedLevelFromPrefs()
-        val filtered = selected?.let { lvl -> chapters.filter { it.level == lvl } } ?: chapters
-        adapter.updateChapters(filtered)
+    override fun onPause() {
+        super.onPause()
+        // 다른 화면(즐겨찾기 등)으로 갈 때 꼬이지 않게 일단 리스너 해제
+        // (MainActivity에서 탭 전환 시 숨기긴 하지만 안전장치)
+        if (activity is MainActivity) {
+            (activity as MainActivity).setSyncButton(false, null)
+        }
     }
 
-    private fun getSelectedLevelFromPrefs(): Level? {
-        val prefs = requireContext().getSharedPreferences("prefs", Context.MODE_PRIVATE)
-        val name = prefs.getString("selected_level", null)
-        return name?.let { Level.valueOf(it) }
+    private fun loadChaptersFromDB() {
+        CoroutineScope(Dispatchers.Main).launch {
+            val chapters = repo.getChaptersFromDB()
+            if (chapters.isNotEmpty()) {
+                adapter.updateChapters(chapters)
+            }
+        }
+    }
+
+    private fun syncData() {
+        progressBar.visibility = View.VISIBLE
+        Toast.makeText(context, "동기화 시작...", Toast.LENGTH_SHORT).show()
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val result = repo.syncWithGoogleSheet()
+
+            withContext(Dispatchers.Main) {
+                progressBar.visibility = View.GONE
+
+                result.onSuccess { msg ->
+                    Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+                    loadChaptersFromDB()
+                }.onFailure { e ->
+                    Toast.makeText(context, "실패: ${e.message}", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
     }
 }

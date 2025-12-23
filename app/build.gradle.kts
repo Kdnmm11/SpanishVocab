@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-parcelize")
+    id("kotlin-kapt") // 1. 플러그인 선언 (필수)
 }
 
 android {
@@ -52,8 +53,25 @@ dependencies {
     implementation("androidx.fragment:fragment-ktx:1.6.2")
     implementation("androidx.viewpager2:viewpager2:1.0.0")
 
-
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
+    // ==========================================
+    // ▼ Room(DB), OkHttp(통신), Gson
+    // ==========================================
+
+    val roomVersion = "2.6.1"
+    implementation("androidx.room:room-runtime:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
+
+    // ★ [수정됨] kapt("...") 대신 add("kapt", "...") 사용
+    // 이렇게 하면 "Unresolved reference" 에러를 무조건 피할 수 있습니다.
+    add("kapt", "androidx.room:room-compiler:$roomVersion")
+
+    // OkHttp (CSV 다운로드)
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+
+    // Gson (데이터 변환)
+    implementation("com.google.code.gson:gson:2.10.1")
 }

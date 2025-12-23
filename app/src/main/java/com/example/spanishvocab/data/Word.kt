@@ -7,11 +7,11 @@ import kotlinx.parcelize.Parcelize
 data class Word(
     val id: Int,
     val spanish: String,
-    val pronunciation: String,
-    val meanings: List<String>,
-    val example: String,
-    val exampleTranslation: String,
-    val chapterId: Int,
+    val meanings: String,
+    val idiom: String = "",
+    val example: String = "",
+    val conjugation: String = "",
     var isFavorite: Boolean = false,
-    var isMastered: Boolean = false
+    val chapterId: Int = 0,
+    val level: String = "A1" // ★ [추가됨] 레벨 정보 (기본값 A1)
 ) : Parcelable
